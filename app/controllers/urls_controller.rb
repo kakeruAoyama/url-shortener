@@ -1,9 +1,10 @@
 class UrlsController < ApplicationController
   before_action :set_url, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /urls or /urls.json
   def index
-    @urls = Url.all
+    @urls = current_user.urls
   end
 
   # GET /urls/1 or /urls/1.json
@@ -21,7 +22,7 @@ class UrlsController < ApplicationController
 
   # POST /urls or /urls.json
   def create
-    @url = Url.new(url_params)
+    @url = current_user.urls.new(url_params)
 
     respond_to do |format|
       if @url.save
@@ -60,11 +61,11 @@ class UrlsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_url
-      @url = Url.find(params[:id])
+      @url = current_user.urls.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def url_params
-      params.require(:url).permit(:original, :hash_value)
+      params.require(:url).permit(:original)
     end
 end
