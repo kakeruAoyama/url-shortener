@@ -58,6 +58,11 @@ class UrlsController < ApplicationController
     end
   end
 
+  def redirect
+    url = Url.find_by(hash_value: params[:hash_value])
+    redirect_to url.original, allow_other_host: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_url
